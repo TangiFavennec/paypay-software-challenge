@@ -19,4 +19,12 @@ public class ImmutableStack<T> {
     public ImmutableStack<T> push(final T input) {
         return null;
     }
+
+    public ImmutableStack<T> reverse(){
+        return null;
+    }
+
+    public static ImmutableStack empty() {
+        return null;
+    }
 }
