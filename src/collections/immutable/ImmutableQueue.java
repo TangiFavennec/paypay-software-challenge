@@ -23,4 +23,8 @@ public class ImmutableQueue<T> implements Queue<T> {
     public boolean isEmpty() {
         return false;
     }
+
+    public static ImmutableQueue empty() {
+        return null;
+    }
 }
