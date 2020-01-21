@@ -5,7 +5,7 @@ import lombok.Value;
 
 /*
 * Immutable Stack :
-* LChained items allows to save memory and preserving immutability
+* Chained items allows to save memory and preserving immutability
 * */
 public class ImmutableStack<T> {
 
@@ -19,6 +19,14 @@ public class ImmutableStack<T> {
 
     private ImmutableStack(final StackItem<T> newItem){
         this.currentItem = newItem;
+    }
+
+    public static ImmutableStack empty() {
+        return new ImmutableStack<>(null);
+    }
+
+    public boolean isEmpty() {
+        return currentItem == null;
     }
 
     public Pair<T, ImmutableStack<T>> peek() {
@@ -39,10 +47,6 @@ public class ImmutableStack<T> {
         return new ImmutableStack<T>(new StackItem(input, currentItem));
     }
 
-    public boolean isEmpty() {
-        return currentItem == null;
-    }
-
     public ImmutableStack<T> reverse(){
         ImmutableStack<T> newStack = empty();
         ImmutableStack<T> currentCopied = this;
@@ -52,9 +56,5 @@ public class ImmutableStack<T> {
             currentCopied = popped.getValue();
         }
         return newStack;
-    }
-
-    public static ImmutableStack empty() {
-        return new ImmutableStack<>(null);
     }
 }

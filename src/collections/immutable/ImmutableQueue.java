@@ -19,9 +19,8 @@ public class ImmutableQueue<T> implements Queue<T> {
         }
     }
 
-    @Override
-    public Queue enQueue(T item) {
-        return new ImmutableQueue(arriving.push(item), leaving);
+    public static ImmutableQueue empty() {
+        return new ImmutableQueue(ImmutableStack.empty(), ImmutableStack.empty());
     }
 
     @Override
@@ -33,20 +32,21 @@ public class ImmutableQueue<T> implements Queue<T> {
     }
 
     @Override
+    public boolean isEmpty() {
+        return arriving.isEmpty() && leaving.isEmpty();
+    }
+
+    @Override
+    public Queue enQueue(T item) {
+        return new ImmutableQueue(arriving.push(item), leaving);
+    }
+
+    @Override
     public T head() {
         if(!leaving.isEmpty()) {
             Pair<T, ImmutableStack<T>> peeked = leaving.peek();
             return peeked.getKey();
         }
         throw new IllegalStateException("Head illegal for empty queue");
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return arriving.isEmpty() && leaving.isEmpty();
-    }
-
-    public static ImmutableQueue empty() {
-        return new ImmutableQueue(ImmutableStack.empty(), ImmutableStack.empty());
     }
 }
