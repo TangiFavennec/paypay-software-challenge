@@ -1,30 +1,60 @@
 package collections.immutable;
 
 import javafx.util.Pair;
+import lombok.Value;
 
+/*
+* Immutable Stack :
+* LChained items allows to save memory and preserving immutability
+* */
 public class ImmutableStack<T> {
 
-    public boolean isEmpty() {
-        return false;
+    @Value
+    private static final class StackItem<T> {
+        T val;
+        StackItem<T> next;
+    }
+
+    private final StackItem<T> currentItem;
+
+    private ImmutableStack(final StackItem<T> newItem){
+        this.currentItem = newItem;
     }
 
     public Pair<T, ImmutableStack<T>> peek() {
-        return null;
+        if(!isEmpty()) {
+            return new Pair(currentItem.getVal(), this);
+        }
+        throw new IllegalStateException("Peek illegal for empty stack");
     }
 
     public Pair<T, ImmutableStack<T>> pop() {
-        return null;
+        if(!isEmpty()) {
+            return new Pair(currentItem.getVal(), new ImmutableStack<>(currentItem.getNext()));
+        }
+        throw new IllegalStateException("Pop illegal for empty stack");
     }
 
     public ImmutableStack<T> push(final T input) {
-        return null;
+        return new ImmutableStack<T>(new StackItem(input, currentItem));
+    }
+
+    public boolean isEmpty() {
+        return currentItem == null;
     }
 
     public ImmutableStack<T> reverse(){
-        return null;
+        ImmutableStack<T> newStack = empty();
+        ImmutableStack<T> currentCopied = this;
+        while(!currentCopied.isEmpty()) {
+            Pair<T, ImmutableStack<T>> popped = currentCopied.pop();
+            newStack = newStack.push(popped.getKey());
+            currentCopied = popped.getValue();
+        }
+        return newStack;
     }
 
     public static ImmutableStack empty() {
-        return null;
+        return new ImmutableStack<>(null);
     }
 }
