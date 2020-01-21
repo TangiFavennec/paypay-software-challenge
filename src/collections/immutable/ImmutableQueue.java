@@ -1,30 +1,52 @@
 package collections.immutable;
 
 import collections.Queue;
+import javafx.util.Pair;
 
 public class ImmutableQueue<T> implements Queue<T> {
 
+    // Two stacks approach which are flipped anytime an item is enqueued or removed
+    private final ImmutableStack<T> arriving;
+    private final ImmutableStack<T> leaving;
+
+    private ImmutableQueue(final ImmutableStack<T> arriving, final ImmutableStack<T> leaving) {
+        if (leaving.isEmpty() && !arriving.isEmpty()) {
+            this.arriving = ImmutableStack.empty();
+            this.leaving = arriving.reverse();
+        } else {
+            this.arriving = arriving;
+            this.leaving = leaving;
+        }
+    }
+
     @Override
     public Queue enQueue(T item) {
-        return null;
+        return new ImmutableQueue(arriving.push(item), leaving);
     }
 
     @Override
     public Queue deQueue() {
-        return null;
+        if(!leaving.isEmpty()) {
+            return new ImmutableQueue(arriving, leaving.pop().getValue());
+        }
+        throw new IllegalStateException("DeQueue illegal for empty queue");
     }
 
     @Override
     public T head() {
-        return null;
+        if(!leaving.isEmpty()) {
+            Pair<T, ImmutableStack<T>> peeked = leaving.peek();
+            return peeked.getKey();
+        }
+        throw new IllegalStateException("Head illegal for empty queue");
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return arriving.isEmpty() && leaving.isEmpty();
     }
 
     public static ImmutableQueue empty() {
-        return null;
+        return new ImmutableQueue(ImmutableStack.empty(), ImmutableStack.empty());
     }
 }
